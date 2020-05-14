@@ -29,7 +29,7 @@ class GameRecord extends Component{
       sumgameid: '',
       usermatchinfo: '',
     }
-    this.matchSoloRecord = this.matchSoloRecord.bind(this);
+    this.matchRecord = this.matchRecord.bind(this);
     this.searchRecord = this.searchRecord.bind(this);
   }
 
@@ -59,8 +59,12 @@ class GameRecord extends Component{
     }
   }
 
+  reload(){
+    this.setState({name : this.state.name, search: this.state.search})
+  }
 
-  async matchSoloRecord(){
+
+  async matchRecord(){
     const usermatch = create({baseURL: 'https://kr.api.riotgames.com/', headers: {'X-Riot-Token': 'RGAPI-d0b8c084-02ca-4a02-865d-d7839eae0490',}})
     let info = await usermatch.get(`/lol/match/v4/matchlists/by-account/${this.state.sumgameid}?endIndex=100`)
     this.setState({
@@ -71,9 +75,10 @@ class GameRecord extends Component{
   async searchRecord() {
     if (this.state.search == this.state.name) {
       Alert.alert(
-        '오류',
+        null,
         '중복된 소환사 명입니다.',
         [
+          {text: '새로고침', onPress: ()=> this.reload()},
           {text: '확인'}
         ],
         {cancelable: false}
@@ -90,7 +95,7 @@ class GameRecord extends Component{
         sumid: response.data.id,
         sumgameid: response.data.accountId,
       })
-      this.matchSoloRecord()
+      this.matchRecord()
        if (this.state.level > 29) { //랭크 전적 검색
          const userrecord = create({baseURL: 'https://kr.api.riotgames.com/', headers: {'X-Riot-Token': 'RGAPI-d0b8c084-02ca-4a02-865d-d7839eae0490'}})
          let league = await userrecord.get('/lol/league/v4/entries/by-summoner/' + response.data.id)
@@ -231,6 +236,7 @@ class GameRecord extends Component{
     return(
       <SafeAreaView style={style.main}>
 
+
         <SearchBar
           style={{backgroundColor: 'black'}}
           onChangeText={this.updateSearch}
@@ -268,12 +274,32 @@ class GameRecord extends Component{
             </View>
           </TouchableOpacity>
           </View>
-            <Text></Text>
-
+          <Champion_mastery />
       </SafeAreaView>
     );
   }
 
+}
+
+class Champion_mastery extends Component {
+  constructor(props) {
+    super(props);
+    this.state={
+
+    }
+  }
+  componentDidMount(){
+
+  }
+  render(){
+    return(
+      <SafeAreaView>
+        <View>
+          <Text>ddsfsf</Text>
+        </View>
+      </SafeAreaView>
+    )
+  }
 }
 
 const Stack = createStackNavigator();
